@@ -1,0 +1,49 @@
+---
+title: "An example with `jags_example`"
+author: "Martina Le-Bert Heyl"
+date: "May 2022"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{myvignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This is an example using the output code from `jags_example` function, and the following implementation using the `runjags` library.
+
+
+```{r setup}
+library(myJpackage)
+```
+
+```{r}
+jags_examples("model1", runme = TRUE)
+```
+
+```{r eval=FALSE}
+model1 <- "model {
+  for (i in 1:N) {
+    eta[i] <- a + b * x[i]
+    logit(prob[i]) <- eta[i]
+    y[i] ~ dbern(prob[i])
+  }
+  a ~ dnorm(0, 0.01)
+  b ~ dnorm(0, 0.01)
+}"
+
+n <- 100
+x <- rnorm(n)
+eta <-  1 + x
+prob <- 1/(1+exp(-eta))
+y <- rbinom(n, size = 1, prob = prob)
+
+library(runjags)
+r <- combine.mcmc(run.jags(model = model1,
+                           data = list(y = y, x = x, N = n),
+                           monitor = c("prob[1]", "a",  "b"),
+                           n.chains = 4,
+                           sample = 10^5,
+                           method = "parallel"))
+summary(r)
+```
+
