@@ -57,7 +57,7 @@ You can use the package in any way you want, but if you are new to JAGS I would 
 
 + `jags_model()`
 
-+ `jags_runjugs()`
++ `jags_runjags()`
 
 # REMINDER
 

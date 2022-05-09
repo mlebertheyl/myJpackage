@@ -3,5 +3,6 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   myvignette: myvignette.html
-last_built: 2022-05-09T18:06Z
+  myvignetteintro: myvignetteintro.html
+last_built: 2022-05-09T19:24Z
 
