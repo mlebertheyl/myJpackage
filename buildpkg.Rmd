@@ -44,8 +44,6 @@ check()
 # Create BUGS or comments file
 usethis::use_version()
 
-# Link to github
-usethis::use_github_links()
 
 # Build website
 # check: https://pkgdown.r-lib.org/index.html; https://pkgdown.r-lib.org/articles/pkgdown.html
