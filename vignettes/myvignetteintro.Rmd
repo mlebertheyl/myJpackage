@@ -1,70 +1,46 @@
 ---
-title: "myJpackage Introduction"
+title: "Example with `jags_example`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{myvignetteintro}
+  %\VignetteIndexEntry{myvignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-
-**My Github**
-https://github.com/mlebertheyl
-
-**Github repository for this package**
-https://github.com/mlebertheyl/myJpackage
+This is an example using the output code from `jags_example` function, and the following implementation using the `runjags` library.
 
 
-# WHERE, WHAT, HOW ...
+```{r setup}
+library(myJpackage)
+```
 
-## A brief (personal) motivational background.
+```{r}
+jags_examples("model1", runme = TRUE)
+```
 
-Have you ever you ever been kin on learning something new, but don't know where to start? Learning a new programming language or skill often feels like that (at least for me). There's usually tons of information about it, but if you are new to it, this only makes the question of where to start even harder.
+```{r eval=FALSE}
+model1 <- "model {
+  for (i in 1:N) {
+    eta[i] <- a + b * x[i]
+    logit(prob[i]) <- eta[i]
+    y[i] ~ dbern(prob[i])
+  }
+  a ~ dnorm(0, 0.01)
+  b ~ dnorm(0, 0.01)
+}"
 
-If you found where to start, you are on the right track, now the question gets more practical. I have found that first I need to understand what is the general structure when coding in a new environment, and how to do it myself.
+n <- 100
+x <- rnorm(n)
+eta <-  1 + x
+prob <- 1/(1+exp(-eta))
+y <- rbinom(n, size = 1, prob = prob)
 
-Going through some basic or general examples does a lot in my learning process. However, the more specific a programming tool is, the more specific the examples you find. My motivation for the package was exactly giving focus on generating some examples that could help when learning a new coding skill.
-
-## A more specific motivation for the problem.
-
-Just Another Gibbs Sampler or better known as JAGS is a program for Bayesian graphical model analyses using Markov Chain Monte Carlo (MCMC) simulation. JAGS aims for compatibility with classic BUGS, Bayesian inference Using Gibbs Sampling, and other software such as R.  
-
-There are several packages to run JAGS using `R`, however we still need to code within BUGS programming language. This package aims to help understand the basic structure of JAGS models and data specification, so you can use the output code from the functions in this package or create your own using the output as a helper in your coding.
-
-# WHAT IS THIS PACKAGE ...
-
-`myJpackage` is a collection of functions that will produce a code as output. It is the opposite of what we usually expect from an `R` function, where the output is a manipulation of the data in some way. Here, there are no data results, but actually a longer code. However, this is the code you can pass to your JAGS model. Also, the arguments for the functions have to do with the type of model you want to specify in JAGS.
-
-# WHAT YOU WILL GET...
-
-+ General code for model specification.
-
-+ An idea on how to manipulate data within JAGS.
-
-+ JAGS parametrization for main distributions. JAGS parametrization is not the same as R!
-
-+ Built examples.
-
-+ Hopefully, a better understanding of the structure of JAGS code (or a useful reminder if you forget later on). 
-
-# WORKFLOW...
-
-You can use the package in any way you want, but if you are new to JAGS I would recommend the following trying these functions first.
-
-+ `jags_init()`
-
-+ `jags_examples()`
-
-+ `jags_model()`
-
-+ `jags_runjags()`
-
-# REMINDER
-
-You need to install JAGS on your computer and then install the `runjags` library. The JAGS version will depend on your computer operating system, `jags_init()` will be of help.
-
-If you want to know more about JAGS, and not about the american football team Jacksonville Jaguars, use "jags bayes" on your Google search. 
-
-
-
-
+library(runjags)
+r <- combine.mcmc(run.jags(model = model1,
+                           data = list(y = y, x = x, N = n),
+                           monitor = c("prob[1]", "a",  "b"),
+                           n.chains = 4,
+                           sample = 10^5,
+                           method = "parallel"))
+summary(r)
+```

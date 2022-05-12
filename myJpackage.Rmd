@@ -1,14 +1,20 @@
 ---
-title: "myJpackage Introduction"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{myvignetteintro}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "Report"
+author: "Martina Le-Bert Heyl"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
 ---
 
+**My Github**
+https://github.com/mlebertheyl
 
+**Github repository for this package**
+https://github.com/mlebertheyl/myJpackage
 
+`myJpackage` website https://mlebertheyl.github.io/myJpackage/
 
 
 # WHERE, WHAT, HOW ...
@@ -60,6 +66,70 @@ You can use the package in any way you want, but if you are new to JAGS I would 
 You need to install JAGS on your computer and then install the `runjags` library. The JAGS version will depend on your computer operating system, `jags_init()` will be of help.
 
 If you want to know more about JAGS, and not about the american football team Jacksonville Jaguars, use "jags bayes" on your Google search. 
+
+# EXAMPLE
+
+This is an example using the output code from `jags_example` function, and the following implementation using the `runjags` library.
+
+
+```{r message=FALSE}
+library(myJpackage)
+library(runjags)
+```
+
+```{r}
+jags_examples("model1", runme = TRUE)
+```
+
+```{r}
+model1 <- "model {
+  for (i in 1:N) {
+    eta[i] <- a + b * x[i]
+    logit(prob[i]) <- eta[i]
+    y[i] ~ dbern(prob[i])
+  }
+  a ~ dnorm(0, 0.01)
+  b ~ dnorm(0, 0.01)
+}"
+
+n <- 100
+x <- rnorm(n)
+eta <-  1 + x
+prob <- 1/(1+exp(-eta))
+y <- rbinom(n, size = 1, prob = prob)
+
+r <- combine.mcmc(run.jags(model = model1,
+                           data = list(y = y, x = x, N = n),
+                           monitor = c("prob[1]", "a",  "b"),
+                           n.chains = 4,
+                           sample = 10^5,
+                           method = "parallel"))
+summary(r)
+```
+
+# FINAL COMMENTS
+
+The puropose was to make a fun package, specially by making it friendly and also useful. The main idea was to gain a better understanding of the structure of JAGS code, and to use it as a reminder later on, since JAGS and R structure and code differ a little.
+
+Details of the package's functions are available on `myJpackage` website https://mlebertheyl.github.io/myJpackage/, and details on the package's construction can be found on https://github.com/mlebertheyl/myJpackage. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
