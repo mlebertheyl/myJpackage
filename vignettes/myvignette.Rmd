@@ -2,7 +2,7 @@
 title: "myJpackage Introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{myvignetteintro}
+  %\VignetteIndexEntry{myvignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

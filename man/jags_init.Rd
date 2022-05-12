@@ -7,11 +7,11 @@
 jags_init(install)
 }
 \arguments{
-\item{install}{Choose between installing JAGS using Homebrew or manually from source.}
+\item{install}{Choose between installing JAGS using "homebrew" or "manual".}
 }
 \description{
 \code{jags_init()} returns the general website links for the correct JAGS installation, as well as the main library to run JAGS in R.
-Briefly the steps are installing Homebrew, and then using it for JAGS installation or downloding the .pkg file from JAGS source. Installation steps may vary depending on whether Mac OS X, Linux or Windows is used.
+Briefly the steps are installing Homebrew, and then using it for JAGS installation or downloading the .pkg file from JAGS source. Installation steps may vary depending on whether Mac OS X, Linux or Windows is used.
 Note that other packages can be used instead of, or complimentary to, \code{runjags}.
 }
 \examples{
@@ -21,6 +21,6 @@ jags_init(install = "manual")
 
 }
 \seealso{
-\url{https://brew.sh/index_es} for Homebrew installation, \url{https://formulae.brew.sh/formula/jags} for JAGS installation using Homebrew,  \url{https://sourceforge.net/projects/mcmc-jags/} for JAGS installation from source, \url{https://cran.r-project.org/web/packages/runjags/index.html} runjags package documentation
+\url{https://brew.sh/index_es} for Homebrew installation; \url{https://formulae.brew.sh/formula/jags} for JAGS installation using Homebrew; \url{https://sourceforge.net/projects/mcmc-jags/} for JAGS installation from source; \url{https://cran.r-project.org/web/packages/runjags/index.html} runjags package documentation
 }
 \concept{website url}

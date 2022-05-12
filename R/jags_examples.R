@@ -16,9 +16,7 @@
 #' @seealso \code{\link[runjags]{run.jags}}
 #' @export
 #' @examples
-#' \dontrun{
-#' j.ex <- jags_examples("model1")
-#' }
+#' jags_examples("model1")
 #'
 jags_examples <- function(example, runme = T) {
   if (example == "model1") {

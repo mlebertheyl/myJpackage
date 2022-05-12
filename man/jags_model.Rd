@@ -32,10 +32,7 @@ are discrete distributions.
 }
 
 \examples{
-\dontrun{
 jags_model("dnorm", "linear", param = FALSE, reg = TRUE)
-}
-
 }
 \seealso{
 \code{\link{jags_param}}

@@ -13,10 +13,7 @@ jags_multivariate(dist)
 \code{jags_multivariate()} prints the parametrization of the main multivariate distributions built in \code{JAGS}.
 }
 \examples{
-\dontrun{
 jags_multivariate("multinomial")
-}
-
 }
 \seealso{
 \code{\link{jags_param}} for univariate distributions.

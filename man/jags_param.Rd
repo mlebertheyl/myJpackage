@@ -23,8 +23,5 @@ the arguments for a wide range of them.
 }
 
 \examples{
-\dontrun{
 jags_param("f")
-}
-
 }

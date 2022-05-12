@@ -81,9 +81,30 @@ JAGS model, as well as run.jags example code.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">j.ex</span> <span class="op">&lt;-</span> <span class="fu">jags_examples</span><span class="op">(</span><span class="st">"model1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">jags_examples</span><span class="op">(</span><span class="st">"model1"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model1 &lt;- "model {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   for (i in 1:N) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     eta[i] &lt;- a + b * x[i]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     logit(prob[i]) &lt;- eta[i]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     y[i] ~ dbern(prob[i])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a ~ dnorm(0, 0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   b ~ dnorm(0, 0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n &lt;- 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x &lt;- rnorm(n)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta &lt;-  1 + x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prob &lt;- 1/(1+exp(-eta))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> y &lt;- rbinom(n, size = 1, prob = prob)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> library(runjags)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r &lt;- combine.mcmc(run.jags(model = model1,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            data = list(y = y, x = x, N = n),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            monitor = c("prob[1]", "a",  "b"),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            n.chains = 4,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            sample = 10^5,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            method = "parallel"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> summary(r)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

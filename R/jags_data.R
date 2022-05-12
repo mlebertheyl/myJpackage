@@ -20,12 +20,8 @@
 #' }
 #' @export
 #' @examples
-#' \dontrun{
 #' jags_data(block = "sqrt")
-#'
 #' jags_data(block = "fix")
-#' }
-#'
 jags_data <- function(block) {
 
   if (block == "sqrt") {

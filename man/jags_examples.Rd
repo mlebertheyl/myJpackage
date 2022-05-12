@@ -27,9 +27,7 @@ jags_examples(example, runme = T)
 }
 
 \examples{
-\dontrun{
-j.ex <- jags_examples("model1")
-}
+jags_examples("model1")
 
 }
 \seealso{

@@ -19,10 +19,7 @@
 #' @seealso \code{\link{jags_param}}
 #' @export
 #' @examples
-#' \dontrun{
 #' jags_model("dnorm", "linear", param = FALSE, reg = TRUE)
-#' }
-#'
 jags_model <- function(likelihood, regression, param = F, reg = F) {
   linea1 <- cat(c("model {",
                   "  for(i in 1:N) {"), sep = "\n")

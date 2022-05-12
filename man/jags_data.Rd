@@ -31,10 +31,6 @@ be taken as observed values in the model.}
 }
 
 \examples{
-\dontrun{
 jags_data(block = "sqrt")
-
 jags_data(block = "fix")
-}
-
 }

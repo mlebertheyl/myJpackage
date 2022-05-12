@@ -2,23 +2,32 @@
 title: "Example with `jags_example`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{myvignette}
+  %\VignetteIndexEntry{myvignetteintro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 This is an example using the output code from `jags_example` function, and the following implementation using the `runjags` library.
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
-```{r setup}
+```{r setup, warning=FALSE}
+# for jags_examples()
 library(myJpackage)
+# for combine.mcmc(); run.jags()
+library(runjags) 
 ```
 
 ```{r}
 jags_examples("model1", runme = TRUE)
 ```
 
-```{r eval=FALSE}
+```{r}
 model1 <- "model {
   for (i in 1:N) {
     eta[i] <- a + b * x[i]
@@ -35,7 +44,6 @@ eta <-  1 + x
 prob <- 1/(1+exp(-eta))
 y <- rbinom(n, size = 1, prob = prob)
 
-library(runjags)
 r <- combine.mcmc(run.jags(model = model1,
                            data = list(y = y, x = x, N = n),
                            monitor = c("prob[1]", "a",  "b"),
@@ -44,3 +52,6 @@ r <- combine.mcmc(run.jags(model = model1,
                            method = "parallel"))
 summary(r)
 ```
+
+
+

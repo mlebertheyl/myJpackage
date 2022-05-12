@@ -73,32 +73,36 @@
     
 <p>This is an example using the output code from <code>jags_example</code> function, and the following implementation using the <code>runjags</code> library.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">myJpackage</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="co"># for jags_examples()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">myJpackage</span><span class="op">)</span>
+<span class="co">#&gt; Welcome to myJpackage! It might on your best interest to read the package's description.</span>
+<span class="co"># for combine.mcmc(); run.jags()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ku-awdc/runjags" class="external-link">runjags</a></span><span class="op">)</span> </code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/jags_examples.html">jags_examples</a></span><span class="op">(</span><span class="st">"model1"</span>, runme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## model1 &lt;- "model {</span>
-<span class="co">##   for (i in 1:N) {</span>
-<span class="co">##     eta[i] &lt;- a + b * x[i]</span>
-<span class="co">##     logit(prob[i]) &lt;- eta[i]</span>
-<span class="co">##     y[i] ~ dbern(prob[i])</span>
-<span class="co">##   }</span>
-<span class="co">##   a ~ dnorm(0, 0.01)</span>
-<span class="co">##   b ~ dnorm(0, 0.01)</span>
-<span class="co">## }"</span>
-<span class="co">## n &lt;- 100</span>
-<span class="co">## x &lt;- rnorm(n)</span>
-<span class="co">## eta &lt;-  1 + x</span>
-<span class="co">## prob &lt;- 1/(1+exp(-eta))</span>
-<span class="co">## y &lt;- rbinom(n, size = 1, prob = prob)</span>
-<span class="co">## library(runjags)</span>
-<span class="co">## r &lt;- combine.mcmc(run.jags(model = model1,</span>
-<span class="co">##                            data = list(y = y, x = x, N = n),</span>
-<span class="co">##                            monitor = c("prob[1]", "a",  "b"),</span>
-<span class="co">##                            n.chains = 4,</span>
-<span class="co">##                            sample = 10^5,</span>
-<span class="co">##                            method = "parallel"))</span>
-<span class="co">## summary(r)</span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/jags_examples.html">jags_examples</a></span><span class="op">(</span><span class="st">"model1"</span>, runme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; model1 &lt;- "model {</span>
+<span class="co">#&gt;   for (i in 1:N) {</span>
+<span class="co">#&gt;     eta[i] &lt;- a + b * x[i]</span>
+<span class="co">#&gt;     logit(prob[i]) &lt;- eta[i]</span>
+<span class="co">#&gt;     y[i] ~ dbern(prob[i])</span>
+<span class="co">#&gt;   }</span>
+<span class="co">#&gt;   a ~ dnorm(0, 0.01)</span>
+<span class="co">#&gt;   b ~ dnorm(0, 0.01)</span>
+<span class="co">#&gt; }"</span>
+<span class="co">#&gt; n &lt;- 100</span>
+<span class="co">#&gt; x &lt;- rnorm(n)</span>
+<span class="co">#&gt; eta &lt;-  1 + x</span>
+<span class="co">#&gt; prob &lt;- 1/(1+exp(-eta))</span>
+<span class="co">#&gt; y &lt;- rbinom(n, size = 1, prob = prob)</span>
+<span class="co">#&gt; library(runjags)</span>
+<span class="co">#&gt; r &lt;- combine.mcmc(run.jags(model = model1,</span>
+<span class="co">#&gt;                            data = list(y = y, x = x, N = n),</span>
+<span class="co">#&gt;                            monitor = c("prob[1]", "a",  "b"),</span>
+<span class="co">#&gt;                            n.chains = 4,</span>
+<span class="co">#&gt;                            sample = 10^5,</span>
+<span class="co">#&gt;                            method = "parallel"))</span>
+<span class="co">#&gt; summary(r)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="st">"model {
   for (i in 1:N) {
     eta[i] &lt;- a + b * x[i]
@@ -115,14 +119,74 @@
 <span class="va">prob</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta</span><span class="op">)</span><span class="op">)</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ku-awdc/runjags" class="external-link">runjags</a></span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/runjags/man/combine.mcmc.html" class="external-link">combine.mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/runjags/man/run.jags.html" class="external-link">run.jags</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model1</span>,
                            data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, x <span class="op">=</span> <span class="va">x</span>, N <span class="op">=</span> <span class="va">n</span><span class="op">)</span>,
                            monitor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prob[1]"</span>, <span class="st">"a"</span>,  <span class="st">"b"</span><span class="op">)</span>,
                            n.chains <span class="op">=</span> <span class="fl">4</span>,
                            sample <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">5</span>,
                            method <span class="op">=</span> <span class="st">"parallel"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></code></pre></div>
+<span class="co">#&gt; Warning: No initial values were provided - JAGS will use the same initial values</span>
+<span class="co">#&gt; for all chains</span>
+<span class="co">#&gt; Warning: You attempted to start parallel chains without setting different PRNG</span>
+<span class="co">#&gt; for each chain, which is not recommended. Different .RNG.name values have been</span>
+<span class="co">#&gt; added to each set of initial values.</span>
+<span class="co">#&gt; Calling 4 simulations using the parallel method...</span>
+<span class="co">#&gt; Following the progress of chain 1 (the program will wait for all chains</span>
+<span class="co">#&gt; to finish before continuing):</span>
+<span class="co">#&gt; Welcome to JAGS 4.3.1 (official binary) on Thu May 12 18:10:55 2022</span>
+<span class="co">#&gt; JAGS is free software and comes with ABSOLUTELY NO WARRANTY</span>
+<span class="co">#&gt; Loading module: basemod: ok</span>
+<span class="co">#&gt; Loading module: bugs: ok</span>
+<span class="co">#&gt; . . Reading data file data.txt</span>
+<span class="co">#&gt; . Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 100</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 2</span>
+<span class="co">#&gt;    Total graph size: 505</span>
+<span class="co">#&gt; . Reading parameter file inits1.txt</span>
+<span class="co">#&gt; . Initializing model</span>
+<span class="co">#&gt; . Adapting 1000</span>
+<span class="co">#&gt; -------------------------------------------------| 1000</span>
+<span class="co">#&gt; ++++++++++++++++++++++++++++++++++++++++++++++++++ 100%</span>
+<span class="co">#&gt; Adaptation successful</span>
+<span class="co">#&gt; . Updating 4000</span>
+<span class="co">#&gt; -------------------------------------------------| 4000</span>
+<span class="co">#&gt; ************************************************** 100%</span>
+<span class="co">#&gt; . . . . Updating 100000</span>
+<span class="co">#&gt; -------------------------------------------------| 100000</span>
+<span class="co">#&gt; ************************************************** 100%</span>
+<span class="co">#&gt; . . . . Updating 0</span>
+<span class="co">#&gt; . Deleting model</span>
+<span class="co">#&gt; . </span>
+<span class="co">#&gt; All chains have finished</span>
+<span class="co">#&gt; Simulation complete.  Reading coda files...</span>
+<span class="co">#&gt; Coda files loaded successfully</span>
+<span class="co">#&gt; Calculating summary statistics...</span>
+<span class="co">#&gt; Calculating the Gelman-Rubin statistic for 3 variables....</span>
+<span class="co">#&gt; Finished running the simulation</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 5001:405000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 1 </span>
+<span class="co">#&gt; Sample size per chain = 4e+05 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           Mean     SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; prob[1] 0.9424 0.0312 4.933e-05      7.986e-05</span>
+<span class="co">#&gt; a       1.3085 0.2843 4.495e-04      6.977e-04</span>
+<span class="co">#&gt; b       1.1199 0.2824 4.465e-04      6.914e-04</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           2.5%    25%    50%    75% 97.5%</span>
+<span class="co">#&gt; prob[1] 0.8656 0.9262 0.9485 0.9652 0.985</span>
+<span class="co">#&gt; a       0.7797 1.1127 1.2988 1.4934 1.895</span>
+<span class="co">#&gt; b       0.5984 0.9252 1.1088 1.3022 1.705</span></code></pre></div>
   </main>
 </div>
 

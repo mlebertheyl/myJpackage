@@ -109,7 +109,7 @@ summary(r)
 
 # FINAL COMMENTS
 
-The puropose was to make a fun package, specially by making it friendly and also useful. The main idea was to gain a better understanding of the structure of JAGS code, and to use it as a reminder later on, since JAGS and R structure and code differ a little.
+The purpose was to make a fun package, specially by making it friendly and also useful. The main idea was to gain a better understanding of the structure of JAGS code, and to use it as a reminder later on, since JAGS and R structure and code differ a little.
 
 Details of the package's functions are available on `myJpackage` website https://mlebertheyl.github.io/myJpackage/, and details on the package's construction can be found on https://github.com/mlebertheyl/myJpackage. 
 

@@ -1,0 +1,219 @@
+---
+title: "STAT 294 - Contemporary Topics in Statistics"
+Source: World Bank https://data.worldbank.org"
+author: "Martina Le-Bert"
+output: flexdashboard::flex_dashboard
+---
+
+
+```{r,warning=FALSE, message=FALSE, echo=FALSE}
+library(rnaturalearth) #to hold and facilitate interaction with Natural Earth map data.
+library(wbstats) # to search and download data from the World Bank API.
+library(leaflet) # to create and customize interactive maps.
+library(DT) # provides an R interface to the JavaScript library DataTables.
+library(ggplot2) # to data visualization.
+library(dplyr) #to data manipulation.
+library(wesanderson) #color palette
+
+map <- ne_countries()
+names(map)[names(map) == "iso_a3"] <- "ISO3"
+names(map)[names(map) == "name"] <- "NAME"
+```
+
+```{r,warning=FALSE, message=FALSE, echo=FALSE}
+e <- wb(
+  indicator = "EN.ATM.GHGT.KT.CE",
+  startdate = 2017, enddate = 2017
+)
+
+f <- wb(
+  indicator = "NY.GDP.PCAP.PP.CD",
+  startdate = 2017, enddate = 2017
+)
+
+g <- wb(
+  indicator = "SP.DYN.LE00.IN",
+startdate = 2017, enddate = 2017
+)
+```
+
+
+```{r}
+map$GHG <- e[match(map$ISO3, e$iso3), "value"]
+map$GDP <- f[match(map$ISO3, f$iso3), "value"]
+map$Life <- g[match(map$ISO3,g$iso3), "value"]
+```
+
+
+
+  
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### Annual GHG emissions, 2017
+
+
+
+```{r}
+pal <- colorBin(
+  palette = c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20"), domain = map$GHG,
+  bins = seq(800, max(map$GHG, na.rm = TRUE) + 10, length.out=10)
+)
+
+map$labels <- paste0(
+  "<strong> Country: </strong> ",
+  map$NAME, "<br/> ",
+  "<strong> GHG: </strong> ",
+  map$GHG, "<br/> "
+) %>%
+  lapply(htmltools::HTML)
+
+leaflet(map) %>%
+  addTiles() %>%
+  setView(lng = 0, lat = 30, zoom = 2) %>%
+  addPolygons(
+    fillColor = ~ pal(GHG),
+    color = "white",
+    fillOpacity = 0.7,
+    label = ~labels,
+    highlight = highlightOptions(
+      color = "black",
+      bringToFront = TRUE
+    )
+  ) %>%
+  leaflet::addLegend(
+    pal = pal, values = ~GHG,
+    opacity = 0.7, title = "GHG"
+  )
+```
+
+### GDP per capita, 2017
+
+```{r}
+pal <- colorBin(
+  palette = c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20"), domain = map$GDP,
+  bins = seq(770, max(map$GDP, na.rm = TRUE) + 10, length.out=10)
+)
+
+map$labels <- paste0(
+  "<strong> Country: </strong> ",
+  map$NAME, "<br/> ",
+  "<strong> GDP: </strong> ",
+  map$GDP, "<br/> "
+) %>%
+  lapply(htmltools::HTML)
+
+leaflet(map) %>%
+  addTiles() %>%
+  setView(lng = 0, lat = 30, zoom = 2) %>%
+  addPolygons(
+    fillColor = ~ pal(GDP),
+    color = "white",
+    fillOpacity = 0.7,
+    label = ~labels,
+    highlight = highlightOptions(
+      color = "black",
+      bringToFront = TRUE
+    )
+  ) %>%
+  leaflet::addLegend(
+    pal = pal, values = ~GDP,
+    opacity = 0.7, title = "GDP"
+  )
+```
+
+### Life expectancy, 2017
+
+```{r}
+pal <- colorBin(
+  palette = c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20"), domain = map$Life,
+  bins = seq(50, max(map$Life, na.rm = TRUE) + 10, length.out=10)
+)
+
+map$labels <- paste0(
+  "<strong> Country: </strong> ",
+  map$NAME, "<br/> ",
+  "<strong> Life Expectancy: </strong> ",
+  map$Life, "<br/> "
+) %>%
+  lapply(htmltools::HTML)
+
+leaflet(map) %>%
+  addTiles() %>%
+  setView(lng = 0, lat = 30, zoom = 2) %>%
+  addPolygons(
+    fillColor = ~ pal(Life),
+    color = "white",
+    fillOpacity = 0.7,
+    label = ~labels,
+    highlight = highlightOptions(
+      color = "black",
+      bringToFront = TRUE
+    )
+  ) %>%
+  leaflet::addLegend(
+    pal = pal, values = ~Life,
+    opacity = 0.7, title = "Life"
+  )
+```
+
+
+   
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### Definitions
+
+  - **Greenhouse gases** absorb heat (infrared radiation) from the Earth´s surface and then emit it back to the surface, producing the greenhouse effect. In simple words, radiation enters the atmosphere, and gets *traped*. 
+
+  - **GDP** is the gross domestic product, which is the total value of the goods and services produced in a country during a specific period of time. 
+
+  - **Life expectancy** is the average number of years a person can expect to live given certain conditions, i.e. life expectancy by country, sex or other demographic factors.
+  
+
+
+### Average emission of GHG, GDP and Life Expectancy per continent, 2017
+
+```{r}
+
+table<-map@data %>%
+  filter(!is.na(GHG)& !is.na(GDP)) %>%
+  group_by(continent) %>% 
+  summarise(GHG = mean(GHG),
+            GDP = mean(GDP),
+            "Life Expectancy" = mean(Life))
+
+datatable(table, class = 'cell-border stripe',
+          options = list(searching=FALSE, 
+                         pageLength=6,
+                         lengthChange = FALSE))
+```   
+
+### GDP per capita vs Life Expectancy related to GHG emissions per continent, 2017
+
+```{r}
+
+MyPalette = c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20")
+map@data %>%
+  filter(continent != "Antarctica" & continent != "Seven seas (open ocean)") %>%
+ggplot(aes(x=GDP, y=Life),na.rm = TRUE) +
+    geom_point(aes(size=GHG, colour= GHG))+
+ scale_x_continuous(breaks=c(0,40000,80000,120000),limits=c(-100, 125000))+
+  scale_colour_gradientn(limits=c(0, 13000000), breaks=seq(0, max(map$GHG, na.rm = TRUE) + 10, length.out=10), colours = MyPalette)+
+  scale_size_continuous(limits=c(0, 13000000), breaks=seq(0, max(map$GHG, na.rm = TRUE) + 10, length.out=10)) +
+ guides(color= guide_legend(), size=guide_legend())+
+  labs(x='GDP per capita',
+      y='Life expectancy')+
+  theme(axis.text =element_text(size=10,color="#191919"),
+        axis.title=element_text(size=20,color="#191919"),
+        panel.background = element_blank(),
+        panel.border = element_rect(color="#191919", size=1, fill=NA),
+        panel.grid.major =  element_line(colour = "#708090",size=0.1),
+        strip.text.x = element_text(size = 10),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 10))+
+theme_light()+
+ facet_wrap(~continent, nrow=4)
+```
+

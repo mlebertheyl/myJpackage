@@ -89,10 +89,19 @@ are discrete distributions.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">jags_model</span><span class="op">(</span><span class="st">"dnorm"</span>, <span class="st">"linear"</span>, param <span class="op">=</span> <span class="cn">FALSE</span>, reg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">jags_model</span><span class="op">(</span><span class="st">"dnorm"</span>, <span class="st">"linear"</span>, param <span class="op">=</span> <span class="cn">FALSE</span>, reg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   for(i in 1:N) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    y[i] ~ dnorm(prob[i], tau)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    prob[i] &lt;- beta0 + beta1*(x[i] - x.bar)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   beta0 ~ dnorm(0, 0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   beta1 ~ dnorm(0, 0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   tau ~ dnorm(0, 0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x.bar &lt;- mean(x)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma &lt;- 1/sqrt(tau)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

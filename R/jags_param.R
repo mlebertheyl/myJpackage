@@ -12,10 +12,7 @@
 #' }
 #' @export
 #' @examples
-#' \dontrun{
 #' jags_param("f")
-#' }
-#'
 jags_param <- function(dist) {
   if (dist == "binom") {
     linea1 <- cat("y[i] ~ dbinom(p, n)",

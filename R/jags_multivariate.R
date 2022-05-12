@@ -6,10 +6,7 @@
 #' @seealso \code{\link{jags_param}} for univariate distributions.
 #' @export
 #' @examples
-#' \dontrun{
 #' jags_multivariate("multinomial")
-#' }
-#'
 jags_multivariate <- function(dist) {
 
   if (dist == "norm") {
